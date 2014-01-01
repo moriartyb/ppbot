@@ -13,7 +13,7 @@ from db import db
 class Urldupe(Module):
     youtube_pattern = re.compile('(?:youtube.com/watch).*?v=([a-zA-Z0-9]+)')
     url_pattern = re.compile('http(?:s|)://[^ #]+')
-
+    cancel = re.compile('.*(\?nodong)') 
     def __init__(self, *args, **kwargs):
         """Constructor"""
 
@@ -61,8 +61,8 @@ class Urldupe(Module):
         """Action to react/respond to chat messages."""
 
         m = Urldupe.url_pattern.search(event['message'])
-
-        if m:
+        n = Urldupe.cancel.search(url)
+        if m and n:
             match = m.group(0).rstrip('/')
             # check if this url has been posted before
             dupes = self.get_dupes(match, event['nick'], event['target'])
